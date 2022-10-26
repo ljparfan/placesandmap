@@ -41,7 +41,7 @@ export const fetchSelectedPlaceAsync = createAsyncThunk(
       const { data } = await placesService.fetchSelectedPlaceByPlaceId(
         details.placeId
       );
-      dispatch(fetchSelectedPlaceSuccess(data));
+      dispatch(fetchSelectedPlaceSuccess(data.results[0]));
     } catch (error) {
       dispatch(fetchSelectedPlaceFailure(error));
     }

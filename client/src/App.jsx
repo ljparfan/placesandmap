@@ -4,11 +4,16 @@ import MapWrapper from "./components/MapWrapper";
 import SearchBar from "./components/SearchBar";
 import { getApiKey } from "./services/key";
 import "./App.css";
+import { useSelector } from "react-redux";
+import { selectSelectedPlace } from "./store/place/placeSelectors";
 
 const App = () => {
-  const [lat, setLat] = useState(0);
-  const [lng, setLng] = useState(0);
+  const [coordinates, setCoordinates] = useState({
+    lat: 0,
+    lng: 0,
+  });
   const [apiKey, setApiKey] = useState(null);
+  const selectedPlace = useSelector(selectSelectedPlace);
 
   useEffect(() => {
     getApiKey().then((response) => {
@@ -19,18 +24,21 @@ const App = () => {
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(
       ({ coords: { latitude, longitude } }) => {
-        setLat(latitude);
-        setLng(longitude);
+        setCoordinates({ lat: latitude, lng: longitude });
       }
     );
   }, []);
 
+  if (!apiKey) {
+    return null;
+  }
+
   return (
     <>
-      <MapWrapper apiKey={apiKey}>
-        <Map coordinates={{ lat, lng }} />
-      </MapWrapper>
       <SearchBar />
+      <MapWrapper apiKey={apiKey}>
+        <Map coordinates={selectedPlace?.geometry?.location || coordinates} />
+      </MapWrapper>
     </>
   );
 };

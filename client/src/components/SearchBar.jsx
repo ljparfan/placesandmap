@@ -1,6 +1,7 @@
-import React, { useMemo } from "react";
+import React, { useCallback, useMemo } from "react";
 import { AutoComplete } from "antd";
 import { useSelector, useDispatch } from "react-redux";
+import { debounce } from "lodash";
 import {
   selectPlaces,
   selectRecentPlaces,
@@ -8,6 +9,7 @@ import {
 } from "../store/place/placeSelectors";
 import {
   fetchPlacesAsync,
+  fetchPlacesStart,
   fetchSelectedPlaceAsync,
 } from "../store/place/placeActions";
 
@@ -18,8 +20,13 @@ const SearchBar = () => {
 
   const dispatch = useDispatch();
 
+  const debouncedHandler = useCallback(
+    debounce((value) => dispatch(fetchPlacesAsync(value)), 500),
+    []
+  );
   const handleChange = (value) => {
-    dispatch(fetchPlacesAsync(value));
+    dispatch(fetchPlacesStart(value));
+    debouncedHandler(value);
   };
 
   const options = useMemo(() => {

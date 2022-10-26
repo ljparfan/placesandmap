@@ -16,3 +16,8 @@ export const selectRecentPlaces = createSelector(
   selectPlace,
   (state) => state.recentPlaces
 );
+
+export const selectSelectedPlace = createSelector(
+  selectPlace,
+  (state) => state.selectedPlace
+);

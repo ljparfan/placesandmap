@@ -14,7 +14,7 @@ const Map = ({ coordinates }) => {
     });
   });
 
-  return <div ref={ref} id="map" style={{ height: "100%", width: "100%" }} />;
+  return <div ref={ref} id="map" style={{ height: "100vh", width: "100%" }} />;
 };
 
 export default Map;
