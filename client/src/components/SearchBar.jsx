@@ -1,5 +1,6 @@
 import React, { useCallback, useMemo } from "react";
-import { AutoComplete } from "antd";
+import { AutoComplete, Input } from "antd";
+import { EnvironmentTwoTone } from "@ant-design/icons";
 import { useSelector, useDispatch } from "react-redux";
 import { debounce } from "lodash";
 import {
@@ -56,27 +57,39 @@ const SearchBar = () => {
   }, [places, recentPlaces, searchKeyword]);
 
   return (
-    <AutoComplete
-      defaultActiveFirstOption={false}
-      value={searchKeyword}
-      onChange={handleChange}
-      popupClassName="certain-category-search-dropdown"
-      dropdownMatchSelectWidth={500}
-      placeholder="Search for a place..."
-      style={{ width: 250 }}
-      onSelect={(item) => {
-        const details = places.find(
-          (searchResult) => searchResult.description === item
-        );
-        dispatch(
-          fetchSelectedPlaceAsync({
-            placeId: details.place_id,
-            description: details.description,
-          })
-        );
-      }}
-      options={options}
-    ></AutoComplete>
+    <div className="search">
+      <AutoComplete
+        defaultActiveFirstOption={false}
+        value={searchKeyword}
+        onChange={handleChange}
+        popupClassName="certain-category-search-dropdown"
+        dropdownMatchSelectWidth={500}
+        style={{ width: "100%" }}
+        onSelect={(item) => {
+          const details = places.find(
+            (searchResult) => searchResult.description === item
+          );
+          dispatch(
+            fetchSelectedPlaceAsync({
+              placeId: details.place_id,
+              description: details.description,
+            })
+          );
+        }}
+        options={options}
+      >
+        <Input
+          prefix={
+            <EnvironmentTwoTone
+              color="primary"
+              className="site-form-item-icon"
+            />
+          }
+          placeholder="Search for a place..."
+          size="large"
+        />
+      </AutoComplete>
+    </div>
   );
 };
 
